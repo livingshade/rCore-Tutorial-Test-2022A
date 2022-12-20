@@ -1,6 +1,9 @@
 
-set -x
 set -e
+
+echo $(pwd)
+
+pushd ./ebpf
 
 builddir="/home/lbr/rCore-Tutorial-Code-2022A/user/build"
 cur=$(pwd)
@@ -29,5 +32,6 @@ do
     cp "./user/${i}.o" "${builddir}/elf/ebpf_${i}.elf"
 done
 
+popd 
 
 exit 0

@@ -52,6 +52,7 @@ pre:
 	@$(foreach t, $(APPS), cp $(t) $(BUILD_DIR)/app/;)
 
 build: clean pre binary
+	bash ./ebpf/build.sh
 	@$(foreach t, $(ELFS), cp $(t).bin $(BUILD_DIR)/bin/;)
 	@$(foreach t, $(ELFS), cp $(t).elf $(BUILD_DIR)/elf/;)
 
