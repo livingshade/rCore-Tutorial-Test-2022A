@@ -6,6 +6,9 @@ echo $(pwd)
 pushd ./ebpf
 
 builddir="/home/lbr/rCore-Tutorial-Code-2022A/user/build"
+targetdir="/home/lbr/rCore-Tutorial-Code-2022A/user/target/riscv64gc-unknown-none-elf/release/"
+ucoredir="/home/lbr/rCore-Tutorial-Code-2022A/ucore"
+
 cur=$(pwd)
 
 if ! command -v clang-12 &> /dev/null
@@ -22,14 +25,30 @@ pushd ./user
 make all
 popd
 
-progs=("naivetest" "maptest" "kernmaptest" "loadprogextest")
-objcopy="riscv64-unknown-elf-objcopy"
+pushd $ucoredir
+make clean
+make 
+popd
 
-for i in ${progs[@]};
+userprogs=("naivetest" "maptest" "kernmaptest" "loadprogextest")
+kernprogs=("map" "time1" "context")
+objcopy="riscv64-unknown-elf-objcopy"
+for i in ${userprogs[@]};
 do
-    echo "cp ./user/${i}.o ${builddir}/elf/ebpf_${i}.elf"
-    touch "${builddir}/app/ebpf_${i}.rs"
-    cp "./user/${i}.o" "${builddir}/elf/ebpf_${i}.elf"
+    echo "cp ./user/${i}.o ${builddir}/elf/ebpf_user_${i}.elf"
+    touch "${builddir}/app/ebpf_user_${i}.rs"
+    # cp "./user/${i}.o" "${targetdir}/ebpf_user_${i}"
+    # cp "./user/${i}.o" "${builddir}/elf/ebpf_user_${i}.elf"
+    cp "${ucoredir}/build/riscv64/ebpf_user_${i}" "${targetdir}/ebpf_user_${i}"
+done
+
+for i in ${kernprogs[@]};
+do
+    echo "cp ./kern/${i}.o"
+    touch "${builddir}/app/ebpf_kern_${i}.rs"
+    cp "./kern/${i}.o" "${targetdir}/ebpf_kern_${i}"
+    cp "./kern/${i}.o" "${builddir}/elf/ebpf_kern_${i}.elf"
+
 done
 
 popd 

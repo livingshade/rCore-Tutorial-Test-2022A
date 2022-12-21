@@ -2,8 +2,7 @@
 
 extern int map_fd;
 
-int foo()
-{
+int foo() {
   bpf_trace_printk("enter map.o!\n", 0, 0, 0);
   bpf_trace_printk("try print mapfd{}\n", map_fd, 0, 0);
   int key, old_value, new_value;
