@@ -21,10 +21,6 @@ pushd ./kern
 make
 popd 
 
-pushd ./user
-make all
-popd
-
 pushd $ucoredir
 make clean
 make 
